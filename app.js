@@ -1,19 +1,23 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const bodyParser = require('body-parser')
+const errorHandler = require('./middlewares/errorHandler')
 
 class App {
-
     constructor(PORT, controllers) {
         this.app = express()
         this.port = PORT
         this.connectDataBase()
         this.initMiddlewares()
         this.initControllers(controllers)
+        this.initErrorHandler()
+    }
+
+    initErrorHandler() {
+        this.app.use(errorHandler)
     }
 
     initMiddlewares() {
-        this.app.use(express.urlencoded())
+        this.app.use(express.urlencoded({ extended: true }))
         this.app.use(express.json())
     }
 
