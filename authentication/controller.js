@@ -38,6 +38,10 @@ class Authentication {
 
             if(token) res.status(200).send({ token }) 
 
+            function comparePasswords() {
+                
+            }
+
         } catch (error) {
             next(error)
         }

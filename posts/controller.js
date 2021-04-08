@@ -22,7 +22,7 @@ class PostController {
     }
 
     getPostById = async (req, res, next) => {
-        const id = req.params.id
+        const { id } = req.params
 
         const post = await postModel.findById(id)
 
@@ -31,7 +31,7 @@ class PostController {
     }
 
     updatePost = async (req, res, next) => {
-        const id = req.params.id
+        const { id } = req.params
         const post_data = req.body
  
         const post = postModel.findByIdAndUpdate(id, post_data, { new: true })
@@ -41,7 +41,7 @@ class PostController {
     }
 
     deletePost = async (req, res, next) => {
-        const id = req.params.id
+        const { id } = req.params
 
         const post = postModel.findByIdAndDelete(id)
 
@@ -61,7 +61,7 @@ class PostController {
         const saved_post = await post.save()
         
         if(saved_post) res.status(200).send(saved_post)
-        else next(new ConflictError(`Failed to create post`))
+            else next(new ConflictError(`Failed to create post`))
     }
 }
 
