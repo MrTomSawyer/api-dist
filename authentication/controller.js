@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const ConflictError = require('../utils/errors/ConflictError')
 const BadRequestError = require('../utils/errors/BadRequestError')
 const NotFoundError = require('../utils/errors/NotFoundError')
+const NotAuthorizedError = require('../utils/errors/NotAuthorizedError')
 
 class Authentication {
     path = '/users'
@@ -23,25 +24,17 @@ class Authentication {
     signIn = async (req, res, next) => {
         try {
             const { email, password } = req.body;
-
             const user = await userModel.findOne({ email }).select('+password').lean()
 
             if (!user) return next(new NotFoundError('Invalid email or password'))
-
             const is_user = await bcrypt.compare(password, user.password)
-
             if (!is_user) return next(new NotFoundError('Invalid email or password'))
 
             delete user.password
-
             const token = await jwt.sign({ user }, 'ABC')
 
             if(token) res.status(200).send({ token }) 
-
-            function comparePasswords() {
-                
-            }
-
+                else next()
         } catch (error) {
             next(error)
         }
@@ -55,7 +48,6 @@ class Authentication {
 
             if (user) return next(new ConflictError('This email already taken'))
             if (password.length < 8) return next(new BadRequestError('Password has to be at least 8 characters long'))
-    
 
             const salt = await bcrypt.genSalt(10)
             const hash = await bcrypt.hash(password, salt)
@@ -65,15 +57,17 @@ class Authentication {
             })
             
             delete new_user.password
-
             const token = await jwt.sign({ user: new_user }, 'ABC')
-
             return res.status(200).send({ token })  
 
         } catch (error) {
             return next(error)
         }
 
+    }
+
+    restorePassword = async (req, res, next) => {
+        return        
     }
 }
 

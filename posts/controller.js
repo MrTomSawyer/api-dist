@@ -42,9 +42,24 @@ class PostController {
 
     deletePost = async (req, res, next) => {
         const { id } = req.params
+        const { authorization } = req.headers
 
-        const post = postModel.findByIdAndDelete(id)
+        if(!authorization || !authorization.startsWith('Bearer ')) {
+            return next(new NotAuthorizedError('You need to sign in before deleting a card'))
+        }
 
+        const token = authorization.replace('Bearer ', '');
+        let payload
+
+        try {
+            payload = await jwt.verify(token, 'ABC')
+        } catch (error) {
+            error.message = 'Failed to verify token'
+            return next(error)
+        }
+
+        const post = await postModel.findByIdAndDelete(id)
+        
         if(post) res.status(200).send(`Post ${id} deleted`)
             else next(new AccessForbidden(`You cant delete other users' posts`))
     }
