@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema({
         required: true,
         select: false
     },
+    email_confirmed: {
+        type: Boolean,
+        default: false,
+        required: false,
+        select: false
+    }
 })
  
 const userModel = mongoose.model('User', userSchema)

@@ -2,15 +2,18 @@ const express = require('express')
 const userModel = require('../users/model')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
+const Email = require('../utils/SendEmail/SendEmail')
 
 const ConflictError = require('../utils/errors/ConflictError')
 const BadRequestError = require('../utils/errors/BadRequestError')
 const NotFoundError = require('../utils/errors/NotFoundError')
-const NotAuthorizedError = require('../utils/errors/NotAuthorizedError')
+const AccessForbidden = require('../utils/errors/AccessForbiddenError')
 
 class Authentication {
     path = '/users'
     router = express.Router()
+    Email = new Email()
 
     constructor() {
         this.initRoutes()
@@ -24,9 +27,11 @@ class Authentication {
     signIn = async (req, res, next) => {
         try {
             const { email, password } = req.body;
-            const user = await userModel.findOne({ email }).select('+password').lean()
+            const user = await userModel.findOne({ email }).select('+password').select('+email_confirmed').lean()
 
             if (!user) return next(new NotFoundError('Invalid email or password'))
+            if(!user.email_confirmed) return next(new AccessForbidden('Confirm your email before logging in'))
+
             const is_user = await bcrypt.compare(password, user.password)
             if (!is_user) return next(new NotFoundError('Invalid email or password'))
 
@@ -66,9 +71,6 @@ class Authentication {
 
     }
 
-    restorePassword = async (req, res, next) => {
-        return        
-    }
 }
 
 module.exports = Authentication

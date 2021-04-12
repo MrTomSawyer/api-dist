@@ -1,8 +1,8 @@
 require('dotenv')
 const App = require('./app')
-const PostController = require('./posts/controller')
-const Authentication = require('./authentication/controller')
-const PasswordReset = require('./authentication/password-reset')
+const PostController = require('./Controllers/Posts')
+const Authentication = require('./Controllers/Authentication')
+const PasswordReset = require('./Controllers/Password-reset')
 
 const { PORT = 3000 } = process.env
 
