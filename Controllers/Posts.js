@@ -13,7 +13,7 @@ class PostController {
         this.initRoutes()
     }
 
-    initRoutes() {
+    initRoutes = () => {
         this.router.get(this.path, this.getPost)
         this.router.get(`${this.path}/:id`, this.getPostById)
         this.router.patch(`${this.path}/:id`, this.updatePost)

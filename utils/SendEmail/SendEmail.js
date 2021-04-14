@@ -7,7 +7,7 @@ class Email {
         to: null,
         subject: null,
         text: null
-    } 
+    }
 
     constructor() {
         this.createTransporter()
@@ -15,7 +15,7 @@ class Email {
 
     createTransporter = async () => {
         this.transporter = await nodemailer.createTransport({
-            service: "gmail",
+            service: 'gmail',
             auth: {
                 user: 'district.robot@gmail.com',
                 pass: 'yh5-RMh-GSR-XTJ', 
@@ -23,22 +23,17 @@ class Email {
         })
     }
 
-    sendEmail = async object => {
-        const { email, subject, text} = object
+    sendEmail = object => {
+        const { email, subject, text } = object
 
         this.options.to = email
         this.options.subject = subject
         this.options.text = text
 
-        try {
-            const email = await this.transporter.sendMail(this.options, function(error, info) {
-                if(error) console.log('ERROR', error)
-                    else ('SUCCESS', info)
-            })
-            console.info('Email sent', email)
-        } catch (error) {
-            console.error('Failed to send Email:', object)
-        }
+        this.transporter.sendMail(this.options, (error, info) => {
+            if(error) console.log('ERROR', error)
+                else ('Email sent', info)
+        })
     }
 }
 

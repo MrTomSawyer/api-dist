@@ -2,7 +2,6 @@ const express = require('express')
 const userModel = require('../users/model')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const nodemailer = require('nodemailer')
 const Email = require('../utils/SendEmail/SendEmail')
 
 const ConflictError = require('../utils/errors/ConflictError')
@@ -39,7 +38,7 @@ class Authentication {
             const token = await jwt.sign({ user }, 'ABC')
 
             if(token) res.status(200).send({ token }) 
-                else next()
+                else next() //?
         } catch (error) {
             next(error)
         }
@@ -63,14 +62,21 @@ class Authentication {
             
             delete new_user.password
             const token = await jwt.sign({ user: new_user }, 'ABC')
+
+            const email_options = {
+                email: email,
+                subject: 'Email confirmation',
+                text: `Follow this link to confirm email: /n https://localhost:3000/email/${email}/${token}`
+            }
+
+            this.Email.sendEmail(email_options)
+
             return res.status(200).send({ token })  
 
         } catch (error) {
             return next(error)
         }
-
     }
-
 }
 
 module.exports = Authentication
