@@ -1,5 +1,6 @@
 const express = require('express')
 const postModel = require('../models/PostModel')
+const auth = require('../middlewares/auth')
 
 const NotFoundError = require('../utils/errors/NotFoundError')
 const AccessForbidden = require('../utils/errors/AccessForbiddenError')
@@ -14,69 +15,76 @@ class PostController {
     }
 
     initRoutes = () => {
-        this.router.get(this.path, this.getPost)
-        this.router.get(`${this.path}/:id`, this.getPostById)
-        this.router.patch(`${this.path}/:id`, this.updatePost)
-        this.router.delete(`${this.path}/:id`, this.deletePost)
-        this.router.post(this.path, this.createPost)
+        this.router.get(this.path, auth, this.getPost)
+        this.router.get(`${this.path}/:id`, auth, this.getPostById)
+        this.router.patch(`${this.path}/:id`, auth, this.updatePost)
+        this.router.delete(`${this.path}/:id`, auth, this.deletePost)
+        this.router.post(this.path, auth, this.createPost)
     }
 
     getPostById = async (req, res, next) => {
         const { id } = req.params
+        const post 
 
-        const post = await postModel.findById(id)
+        try {
+            post = await postModel.findById(id)
+        } catch (error) {
+            return next(new NotFoundError(`No post with id: ${id} found`))
+        }
 
-        if(post) res.status(200).send(post)
-            else next(new NotFoundError(`Post with ${id} not found`))
+        res.status(200).send(post)
     }
 
     updatePost = async (req, res, next) => {
         const { id } = req.params
         const post_data = req.body
- 
-        const post = postModel.findByIdAndUpdate(id, post_data, { new: true })
+        const post
 
-        if(post) res.status(200).send(post)
-            else next(new NotFoundError(`Post with ${id} not found`))
+        try {
+            post = postModel.findByIdAndUpdate(id, post_data, { new: true })
+        } catch (error) {
+            return next(new NotFoundError(`No post with id: ${id} found`))
+        }
+
+        res.status(200).send(post)
     }
 
     deletePost = async (req, res, next) => {
         const { id } = req.params
-        const { authorization } = req.headers
-
-        if(!authorization || !authorization.startsWith('Bearer ')) {
-            return next(new NotAuthorizedError('You need to sign in before deleting a card'))
-        }
-
-        const token = authorization.replace('Bearer ', '');
-        let payload
+        const post
 
         try {
-            payload = await jwt.verify(token, 'ABC')
+            post = await postModel.findByIdAndDelete(id)   
         } catch (error) {
-            error.message = 'Failed to verify token'
-            return next(error)
+            return next(new NotFoundError(`Post with ${id} not found`))
         }
-
-        const post = await postModel.findByIdAndDelete(id)
         
-        if(post) res.status(200).send(`Post ${id} deleted`)
-            else next(new AccessForbidden(`You cant delete other users' posts`))
+        res.status(200).send(`Post ${id} deleted`)
     }
 
     getPost = async (req, res, next) => {
-        const post = await postModel.find()
+        const post
 
-        if(post) res.status(200).send(post)
-            else next(new NotFoundError(`No posts found`))
+        try {
+            post = await postModel.find()
+        } catch (error) {
+            return next(new NotFoundError(`No posts have yet been saved`))
+        }
+
+        res.status(200).send(post)
     }
 
     createPost = async (req, res) => {
-        const post = new postModel(req.body)
-        const saved_post = await post.save()
+        const data = req.body
+        const post
+
+        try {
+            post = postModel.create(data)
+        } catch (error) {
+            return next(new ConflictError(`Failed to create post`))
+        }
         
-        if(saved_post) res.status(200).send(saved_post)
-            else next(new ConflictError(`Failed to create post`))
+        res.status(201).send('Post created', post)
     }
 }
 
