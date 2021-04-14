@@ -2,7 +2,7 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
-const userModel = require('../users/model')
+const userModel = require('../models/UserModel')
 const Email = require('../utils/SendEmail/SendEmail')
 
 const NotFoundError = require('../utils/errors/NotFoundError')

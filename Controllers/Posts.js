@@ -1,5 +1,5 @@
 const express = require('express')
-const postModel = require('../posts/model')
+const postModel = require('../models/PostModel')
 
 const NotFoundError = require('../utils/errors/NotFoundError')
 const AccessForbidden = require('../utils/errors/AccessForbiddenError')

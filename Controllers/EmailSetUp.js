@@ -1,5 +1,5 @@
 const express = require('express')
-const userModel = require('../users/model')
+const userModel = require('../models/UserModel')
 const SendEmail = require('../utils/SendEmail/SendEmail')
 
 const BadRequest = require('../utils/errors/BadRequestError')
