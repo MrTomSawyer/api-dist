@@ -1,5 +1,5 @@
 const express = require('express')
-const postModel = require('../models/PostModel')
+let postModel = require('../models/PostModel')
 const auth = require('../middlewares/auth')
 
 const NotFoundError = require('../utils/errors/NotFoundError')
@@ -24,7 +24,7 @@ class PostController {
 
     getPostById = async (req, res, next) => {
         const { id } = req.params
-        const post 
+        let post 
 
         try {
             post = await postModel.findById(id)
@@ -37,11 +37,11 @@ class PostController {
 
     updatePost = async (req, res, next) => {
         const { id } = req.params
-        const post_data = req.body
-        const post
+        let post_data = req.body
+        let post
 
         try {
-            post = postModel.findByIdAndUpdate(id, post_data, { new: true })
+            post = await postModel.findByIdAndUpdate(id, post_data, { new: true })
         } catch (error) {
             return next(new NotFoundError(`No post with id: ${id} found`))
         }
@@ -51,7 +51,7 @@ class PostController {
 
     deletePost = async (req, res, next) => {
         const { id } = req.params
-        const post
+        let post
 
         try {
             post = await postModel.findByIdAndDelete(id)   
@@ -63,7 +63,7 @@ class PostController {
     }
 
     getPost = async (req, res, next) => {
-        const post
+        let post
 
         try {
             post = await postModel.find()
@@ -76,15 +76,15 @@ class PostController {
 
     createPost = async (req, res) => {
         const data = req.body
-        const post
+        let post
 
         try {
-            post = postModel.create(data)
+            post = await postModel.create(data)
         } catch (error) {
             return next(new ConflictError(`Failed to create post`))
         }
-        
-        res.status(201).send('Post created', post)
+
+        res.status(201).send(post)
     }
 }
 

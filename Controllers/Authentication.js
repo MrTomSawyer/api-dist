@@ -37,8 +37,8 @@ class Authentication {
             delete user.password
             const token = await jwt.sign({ user }, 'ABC')
 
-            if(token) res.status(200).send({ token }) 
-                else next() //?
+            res.status(200).send({ token }) 
+
         } catch (error) {
             next(error)
         }
@@ -46,6 +46,7 @@ class Authentication {
 
     signUp = async (req, res, next) => {
         const { email, password, name } = req.body
+        console.log('!!!', req.body)
 
         try {
             const user = await userModel.findOne({ email })
@@ -71,12 +72,14 @@ class Authentication {
 
             this.Email.sendEmail(email_options)
 
-            return res.status(200).send({ token })  
+            res.status(201).send({ token })  
 
         } catch (error) {
             return next(error)
         }
     }
 }
+
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsX2NvbmZpcm1lZCI6ZmFsc2UsIl9pZCI6IjYwNzcyNTlhMGVhMWVkMzg3MDRiYzMyMyIsImVtYWlsIjoibGV0dGVydGhpbmdAeWFuZGV4LnJ1IiwicGFzc3dvcmQiOiIkMmIkMTAkdGdhcGZnVnc0L0RsZlJzZGRkaEJQLkozc1h3WjZjLy5ienhlalJyMTE5dnlyemRjSS4vNC4iLCJuYW1lIjoiU2xhdmEiLCJfX3YiOjB9LCJpYXQiOjE2MTg0MjExNDZ9.LWZzmixvj0rmiY9U5A613DCJfix-AygaxyVT1s-cw34
 
 module.exports = Authentication

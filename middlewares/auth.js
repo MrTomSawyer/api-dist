@@ -1,5 +1,5 @@
 const NotAuthorizedError = require('../utils/errors/NotAuthorizedError')
-const jwt = require('jwt')
+const jwt = require('jsonwebtoken')
 
 const auth = (req, res, next) => {
     const { authorization } = req.headers
@@ -10,7 +10,7 @@ const auth = (req, res, next) => {
 
     const token = authorization.replace('Bearer ', '')
 
-    const payload
+    let payload
 
     try {
         payload = jwt.verify(token, 'ABC')

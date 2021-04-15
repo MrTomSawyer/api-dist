@@ -26,8 +26,7 @@ const userSchema = new mongoose.Schema({
     email_confirmed: {
         type: Boolean,
         default: false,
-        required: false,
-        select: false
+        required: false
     }
 })
  
