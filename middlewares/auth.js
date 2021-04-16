@@ -18,7 +18,7 @@ const auth = (req, res, next) => {
         return next(new NotAuthorizedError('Authorization is required'))
     }
 
-    req.user = payload
+    req.user = payload.user
 
     return next()
 }

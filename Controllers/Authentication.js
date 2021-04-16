@@ -79,6 +79,6 @@ class Authentication {
     }
 }
 
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsX2NvbmZpcm1lZCI6ZmFsc2UsIl9pZCI6IjYwNzcyNTlhMGVhMWVkMzg3MDRiYzMyMyIsImVtYWlsIjoibGV0dGVydGhpbmdAeWFuZGV4LnJ1IiwicGFzc3dvcmQiOiIkMmIkMTAkdGdhcGZnVnc0L0RsZlJzZGRkaEJQLkozc1h3WjZjLy5ienhlalJyMTE5dnlyemRjSS4vNC4iLCJuYW1lIjoiU2xhdmEiLCJfX3YiOjB9LCJpYXQiOjE2MTg0MjExNDZ9.LWZzmixvj0rmiY9U5A613DCJfix-AygaxyVT1s-cw34
+//
 
 module.exports = Authentication
