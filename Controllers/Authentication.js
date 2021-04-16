@@ -46,7 +46,6 @@ class Authentication {
 
     signUp = async (req, res, next) => {
         const { email, password, name } = req.body
-        console.log('!!!', req.body)
 
         try {
             const user = await userModel.findOne({ email })
@@ -67,7 +66,7 @@ class Authentication {
             const email_options = {
                 email: email,
                 subject: 'Email confirmation',
-                text: `Follow this link to confirm email: /n https://localhost:3000/email/${email}/${token}`
+                text: `Follow this link to confirm email:\nhttps://localhost:3000/email/${email}/${token}`
             }
 
             this.Email.sendEmail(email_options)

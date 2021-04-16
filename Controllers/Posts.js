@@ -51,12 +51,19 @@ class PostController {
 
     deletePost = async (req, res, next) => {
         const { id } = req.params
+        const  owner  = req.user.user
         let post
 
         try {
-            post = await postModel.findByIdAndDelete(id)   
+            const post_to_delete = await postModel.findOne({ _id: id })
+
+            if(post_to_delete._id === owner._id) {
+                post = await postModel.findByIdAndDelete(id)   
+            } else {
+                return next(new AccessForbidden('You can only delete your own posts'))
+            }
         } catch (error) {
-            return next(new NotFoundError(`Post with ${id} not found`))
+            return next(new NotFoundError(`Failed to delete post ${id}`))
         }
         
         res.status(200).send(`Post ${id} deleted`)
