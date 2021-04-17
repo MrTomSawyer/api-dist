@@ -85,7 +85,7 @@ class PostController {
         const data = req.body
         data.author = req.user._id
         let post
-        console.log('!!!', data)
+
         try {
             post = await postModel.create(data)
         } catch (error) {
@@ -97,7 +97,3 @@ class PostController {
 }
 
 module.exports = PostController
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsX2NvbmZpcm1lZCI6ZmFsc2UsIl9pZCI6IjYwNzlkMTBiZTMzNDhmMjExNDJkMzg5OCIsImVtYWlsIjoiZEBkLnJ1IiwicGFzc3dvcmQiOiIkMmIkMTAkdGs5SG4wWnhTVVZRSWdUZWJZNzA4Lkl2Z1dWU0NKSmhLTDlqNWNZcFhWLnVwc1RIeHI1S08iLCJuYW1lIjoiZmZmZiIsIl9fdiI6MH0sImlhdCI6MTYxODU5NjEwN30.6_zuXpDAkvF2x-VKYiEobx7MAaWfMOoE0eRQgD5Hs8E
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsX2NvbmZpcm1lZCI6ZmFsc2UsIl9pZCI6IjYwNzlkMTU3MWY0ODJlNDQxMGRjMWExYiIsImVtYWlsIjoiYWFhQGEucnUiLCJwYXNzd29yZCI6IiQyYiQxMCQ4UmM0U3o4VUl4Y1NsVlZPOUN1b2guWHBVUVlDb2FhN21ra0tHeUpxdEhRTlpqSUtQQS9OcSIsIm5hbWUiOiJhYWEiLCJfX3YiOjB9LCJpYXQiOjE2MTg1OTYxODN9.IZRwp6bTHZkGaAflVkhwp5TZldnjDJDi7FA6tOI7tvQ

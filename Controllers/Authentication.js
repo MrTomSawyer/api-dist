@@ -59,6 +59,8 @@ class Authentication {
             const new_user = await userModel.create({
                 email, password: hash, name
             })
+
+            console.log('!!!', new_user)
             
             delete new_user.password
             const token = await jwt.sign({ user: new_user }, 'ABC')
@@ -66,7 +68,7 @@ class Authentication {
             const email_options = {
                 email: email,
                 subject: 'Email confirmation',
-                text: `Follow this link to confirm email:\nhttps://localhost:3000/email/${email}/${token}`
+                text: `Follow this link to confirm email:\nhttps://localhost:3000/email/${token}`
             }
 
             this.Email.sendEmail(email_options)
@@ -74,11 +76,10 @@ class Authentication {
             res.status(201).send({ token })  
 
         } catch (error) {
+            console.log('!!!', error)
             return next(error)
         }
     }
 }
-
-//
 
 module.exports = Authentication
