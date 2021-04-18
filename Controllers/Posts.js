@@ -15,7 +15,7 @@ class PostController {
     }
 
     initRoutes = () => {
-        this.router.get(this.path, auth, this.getPost)
+        this.router.get(this.path, auth, this.getPosts)
         this.router.get(`${this.path}/:id`, auth, this.getPostById)
         this.router.patch(`${this.path}/:id`, auth, this.updatePost)
         this.router.delete(`${this.path}/:id`, auth, this.deletePost)
@@ -29,7 +29,7 @@ class PostController {
         try {
             post = await postModel.findById(id)
         } catch (error) {
-            return next(new NotFoundError(`No post with id: ${id} found`))
+            return next(new NotFoundError(`No post with the id: ${id} found`))
         }
 
         res.status(200).send(post)
@@ -43,7 +43,7 @@ class PostController {
         try {
             post = await postModel.findByIdAndUpdate(id, post_data, { new: true })
         } catch (error) {
-            return next(new NotFoundError(`No post with id: ${id} found`))
+            return next(new NotFoundError(`No post with the id: ${id} found`))
         }
 
         res.status(200).send(post)
@@ -69,16 +69,16 @@ class PostController {
         res.status(200).send(`Post ${id} deleted`)
     }
 
-    getPost = async (req, res, next) => {
-        let post
+    getPosts = async (req, res, next) => {
+        let posts
 
         try {
-            post = await postModel.find()
+            posts = await postModel.find()
         } catch (error) {
             return next(new NotFoundError(`No posts have yet been saved`))
         }
 
-        res.status(200).send(post)
+        res.status(200).send(posts)
     }
 
     createPost = async (req, res, next) => {

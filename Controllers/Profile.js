@@ -32,11 +32,12 @@ class Profile {
         const { _id } = req.user
 
         try {
-            await userModel.findByIdAndDelete(_id, { description }, { new: true })
-            res.status(200).send(`Account ${_id} deleted`)
+            await userModel.findByIdAndDelete(_id)
         } catch (error) {
             next(new BadRequestError('Failed to delete account'))
         }
+        
+        res.status(200).send(`Account ${_id} deleted`)
     }
 }
 

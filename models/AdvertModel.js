@@ -30,6 +30,6 @@ const advertSchema = new mongoose.Schema({
     }
 })
 
-const advertSchema = mongoose.model('Advert', advertSchema)
+const advertModel = mongoose.model('Advert', advertSchema)
 
-module.exports = advertSchema
+module.exports = advertModel
