@@ -27,6 +27,20 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
         required: false
+    },
+    userpic: {
+        type: String,
+        required: false,
+        validate: {
+            validator(link) {
+                return validator.isURL(link)
+            }
+        }
+    },
+    description: {
+        type: String,
+        required: false,
+		maxlength: 280,
     }
 })
  
